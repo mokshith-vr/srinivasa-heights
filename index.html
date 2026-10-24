@@ -297,7 +297,7 @@ footer .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 footer .disc{font-size:.78rem;opacity:.7;max-width:110ch}
 @media (min-width:721px){footer{padding-block:36px}}
 
-.fab{position:fixed;right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:15;width:60px;height:60px;border-radius:50%;background:#25a35a;color:#fff;display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(0,0,0,.45);text-decoration:none;transition:transform .2s}
+.fab{position:fixed;right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:15;width:60px;height:60px;border-radius:50%;background:#25a35a;color:#fff;display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(0,0,0,.45);text-decoration:none;transition:transform .2s}
 .fab:hover{transform:scale(1.08)}
 .fab::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25a35a;animation:ring 2.4s infinite}
 @keyframes ring{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
@@ -383,6 +383,22 @@ section{padding-block:76px}
 }
 * {-webkit-tap-highlight-color:transparent}
 section,header,[id]{scroll-margin-top:84px}
+
+/* plan expand + lightbox */
+.plan-card{position:relative}
+.expand{position:absolute;right:14px;bottom:14px;z-index:2;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:10px 16px;background:var(--ink);color:var(--bg);font:600 .9rem var(--font-body);cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.5);transition:transform .2s}
+.expand:hover{transform:scale(1.05)}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(10,12,14,.98);display:grid;grid-template-rows:auto 1fr auto;padding:calc(10px + env(safe-area-inset-top,0px)) max(10px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+.lightbox[hidden]{display:none!important}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#f2f1ec;padding:4px 6px 10px;font-weight:600}
+.lb-close{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:1.2rem;cursor:pointer}
+.lb-close:hover{background:rgba(255,255,255,.25)}
+.lb-scroll{overflow:auto;display:flex;min-height:0;-webkit-overflow-scrolling:touch;border-radius:12px}
+.lb-scroll img{margin:auto;max-width:100%;max-height:100%;object-fit:contain;background:#fff;border-radius:10px;cursor:zoom-in}
+.lb-scroll img.big{max-width:none;max-height:none;width:220%;cursor:zoom-out}
+@media (min-width:900px){.lb-scroll img.big{width:160%}}
+.lb-hint{color:rgba(242,241,236,.65);font-size:.85rem;text-align:center;margin-top:8px}
+@media (max-width:600px){.expand span{display:none}.expand{padding:12px;right:10px;bottom:10px}}
 </style>
 </head>
 <body>
@@ -414,7 +430,6 @@ section,header,[id]{scroll-margin-top:84px}
   <div class="hero-photo rv">
     <div class="frame"><img src="img/building.jpg" alt="Architect's view of Srinivasa Heights, a stilt plus five-floor apartment building" width="1335" height="1088"></div>
     <div class="float-card fc1"><b class="num-font">3 BHK</b><span>Every home, 20 in all</span></div>
-    <div class="float-card fc2"><b class="num-font">Vaastu</b><span>Compliant design</span></div>
   </div>
 </div></header>
 
@@ -446,7 +461,9 @@ section,header,[id]{scroll-margin-top:84px}
   </div></div>
   <div class="plan-wrap">
     <div>
-      <div class="plan-card rv" id="planCard"><img id="planImg" src="img/plan-west.jpg" alt="West-facing 3 BHK floor plan"></div>
+      <div class="plan-card rv" id="planCard"><img id="planImg" src="img/plan-west.jpg" alt="West-facing 3 BHK floor plan">
+        <button class="expand" id="planExpand" type="button" aria-label="View plan full screen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><span>Expand</span></button>
+      </div>
       <p class="plan-hint">Tap the plan to zoom</p>
     </div>
     <div class="plan-info rv">
@@ -603,6 +620,11 @@ section,header,[id]{scroll-margin-top:84px}
   <p class="disc">Specifications, designs and dimensions may change as required by the authorities or the architect, and do not form part of an offer or contract unless covered in the agreement. Costs shown are estimates at ₹4,500 per sq ft and exclude registration, GST and other charges. Illustrations are artist's impressions.</p>
 </div></footer>
 
+<div class="lightbox" id="lb" hidden role="dialog" aria-modal="true" aria-label="Floor plan, full screen">
+  <div class="lb-bar"><span id="lbTitle">Floor plan</span><button class="lb-close" id="lbClose" type="button" aria-label="Close">✕</button></div>
+  <div class="lb-scroll" id="lbScroll"><img id="lbImg" alt=""></div>
+  <p class="lb-hint">Tap the plan to zoom in or out. Pinch to zoom on phone.</p>
+</div>
 <a class="fab" href="https://wa.me/918686117007" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
 </a>
@@ -627,7 +649,7 @@ section,header,[id]{scroll-margin-top:84px}
     3:{face:"West",s:1750,bal:2,ent:"West entrance"},
     4:{face:"East",s:1675,bal:3,ent:"East entrance"}
   };
-  var SOLD = ['101','102','103'];
+  var SOLD = ['101','102','103','202','304','403'];
   function label(n){ var f = Math.floor(n/100), u = n%100; return f===1 ? 'G'+u : String((f-1)*100+u); }
   var isSold = function(n){ return SOLD.indexOf(label(n)) > -1; };
   var ORD = ['','st','nd','rd','th','th'];
@@ -728,6 +750,18 @@ section,header,[id]{scroll-margin-top:84px}
     area.innerHTML = k==='iso' ? '3D <small>isometric view of a floor</small>' : k==='full' ? '4 <small>homes on every floor</small>' : P.area + ' <small>sq ft · 3 BHK</small>';
     list.innerHTML = P.rooms.map(function(r){ return '<li>'+r[0]+'<span>'+r[1]+'</span></li>'; }).join('');
   }
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbScroll = document.getElementById('lbScroll');
+  function openLb(){ lbImg.src = pimg.src; lbImg.alt = pimg.alt; document.getElementById('lbTitle').textContent = pimg.alt; lbImg.classList.remove('big'); lb.hidden = false; document.body.style.overflow = 'hidden'; document.getElementById('lbClose').focus(); }
+  function closeLb(){ lb.hidden = true; document.body.style.overflow = ''; }
+  document.getElementById('planExpand').addEventListener('click', function(e){ e.stopPropagation(); openLb(); });
+  document.getElementById('lbClose').addEventListener('click', closeLb);
+  lb.addEventListener('click', function(e){ if (e.target === lb || e.target === lbScroll) closeLb(); });
+  lbImg.addEventListener('click', function(e){
+    var r = lbImg.getBoundingClientRect(), fx = (e.clientX - r.left)/r.width, fy = (e.clientY - r.top)/r.height;
+    lbImg.classList.toggle('big');
+    if (lbImg.classList.contains('big')) { lbScroll.scrollLeft = fx*lbImg.offsetWidth - lbScroll.clientWidth/2; lbScroll.scrollTop = fy*lbImg.offsetHeight - lbScroll.clientHeight/2; }
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) closeLb(); });
   card.addEventListener('click', function(e){
     var r = card.getBoundingClientRect();
     pimg.style.transformOrigin = ((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';
