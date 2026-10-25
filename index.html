@@ -400,6 +400,22 @@ section,header,[id]{scroll-margin-top:84px}
 .lb-hint{color:rgba(242,241,236,.65);font-size:.85rem;text-align:center;margin-top:8px}
 @media (max-width:600px){.expand span{display:none}.expand{padding:12px;right:10px;bottom:10px}}
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G7GRBCLQ72"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G7GRBCLQ72');
+  // Count WhatsApp taps, phone copies and map opens as events
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a,button'); if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (h.indexOf('wa.me') > -1) gtag('event', 'whatsapp_click', {location: a.id || a.className});
+    else if (h.indexOf('google.com/maps') > -1) gtag('event', 'map_open');
+    else if (a.classList.contains('copy')) gtag('event', 'phone_copy', {number: a.dataset.copy});
+  });
+</script>
 </head>
 <body>
 
