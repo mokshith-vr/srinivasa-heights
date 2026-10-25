@@ -86,11 +86,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
 nav.solid{border-bottom-color:var(--line)}
 nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
-.brand img{height:58px;width:auto;transition:height .3s}
-nav.solid .brand img{height:50px}
+.brand img{height:58px;width:auto}
+
 .hero-logo{width:min(420px,88%);height:auto;animation:logoIn 1s cubic-bezier(.2,.7,.2,1) both}
 @keyframes logoIn{from{transform:translateY(12px) scale(.97)}to{transform:none}}
-@media (max-width:600px){.brand img{height:54px}nav.solid .brand img{height:48px}}
+@media (max-width:600px){.brand img{height:54px}}
 .navlinks{display:flex;gap:28px;font-size:.95rem}
 .navlinks a{text-decoration:none;color:var(--muted);position:relative}
 .navlinks a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:1.5px;background:var(--accent);transition:right .3s}
@@ -105,8 +105,8 @@ nav .btn{padding:10px 20px}
 .status{display:inline-flex;align-items:center;gap:10px;justify-self:start;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 10px;font-size:.88rem;font-weight:500}
 .status i{width:10px;height:10px;border-radius:50%;background:var(--gold);animation:beat 2s infinite}
 @keyframes beat{0%{box-shadow:0 0 0 0 var(--gold)}70%{box-shadow:0 0 0 9px transparent}}
-.hero h1{font-size:clamp(3rem,7vw,5.6rem);font-weight:700;letter-spacing:-.045em;line-height:.95}
-.hero h1 .w{display:inline-block;animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{font-size:clamp(3rem,7vw,5.6rem);font-weight:700;letter-spacing:-.03em;line-height:1}
+.hero h1 .w{display:inline-block}
 .hero h1 em{font-style:normal;color:var(--accent)}
 @keyframes rise{from{transform:translateY(35%)}to{transform:none}}
 .price-tag{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
@@ -330,7 +330,7 @@ footer .disc{font-size:.78rem;opacity:.7;max-width:110ch}
 /* compact layout */
 section{padding-block:76px}
 .sec-head{margin-bottom:36px}
-.loc{display:block;max-width:none}
+.loc{display:block;max-width:1200px}
 .loc-left{display:grid;grid-template-columns:.85fr 1.15fr;gap:20px 56px;align-items:start}
 .loc-left .sec-head{grid-row:1/4}
 .loc-left .marks{margin:0}
